@@ -8,7 +8,7 @@ const messages = document.querySelector(".message");
 const playAgainButton = document.querySelector(".play-again");
 
 let word = "magnolia";
-const guessedLetters = [];
+let guessedLetters = [];
 let remainingGuesses = 8;
 
 const getWord = async function (){
@@ -77,6 +77,8 @@ const makeGuess = function (guess) {
     showGuessedLetters();
     updateWordProgress(guessedLetters);
     updateGuessesRemaining(guess);
+    showGuessedLetters();
+    updateWordProgress(guessedLetters);
   }
 };
 
@@ -114,8 +116,8 @@ if (!upperWord.includes(guess)) {
     messages.innerText = "Yes! You got a letter!";
 }
 if (remainingGuesses === 0) {
-    messages.innerHTML = `Game over! The word was <span = "highlight">${word}</span>.`;
-    
+    messages.innerHTML = `Game over! The word was <span class= "highlight">${word}</span>.`;
+    startOver();
 } else if (remainingGuesses === 1) {
     remainingGuessesSpan.innerText = `${remainingGuesses} guess`;
 } else {
@@ -127,7 +129,31 @@ if (remainingGuesses === 0) {
 const checkIfWin = function (){
     if (word.toUpperCase()=== wordProgress.innerText){
         messages.classList.add("win");
-        messages.innerHTML = `<p class="highlight">You guessed to word! You win!</p>`
+        messages.innerHTML = `<p class="highlight">You guessed the word! You win!</p>`
+startOver();
     }
 };
 
+const startOver = function () {
+    
+        guessButton.classList.add("hide");
+        remainingGuessesParagraph.classList.add("hide");
+        guessedLettersElement.classList.add("hide");
+        playAgainButton.classList.remove("hide");
+    }; 
+    
+playAgainButton.addEventListener("click", function (){
+    messages.classList.remove("win");
+    guessedLetters = [];
+    remainingGuesses = 8;
+    remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
+    guessedLettersElement.innerHTML = "";
+    messages.innerText = "";
+             
+    getWord();
+
+    guessButton.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+    remainingGuessesParagraph.classList.remove("hide");
+    guessedLettersElement.classList.remove("hide");
+});
